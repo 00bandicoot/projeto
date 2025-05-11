@@ -1,0 +1,47 @@
+.container {
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 24px;
+  }
+  
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 20px;
+  }
+  
+  .card {
+    background-color: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  .card:hover {
+    transform: scale(1.02);
+  }
+  
+  .poster {
+    width: 100%;
+    height: 320px;
+    object-fit: cover;
+  }
+  
+  .content {
+    padding: 16px;
+  }
+  
+  .content h2 {
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+  }
+  
+  .content p {
+    color: #666;
+  }
