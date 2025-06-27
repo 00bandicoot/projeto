@@ -1,0 +1,42 @@
+const express = require('express');
+const axios = require('axios');
+const fs = require('fs-extra');
+const path = require('path');
+
+const app = express();
+const PORT = 3000;
+const CACHE_DIR = path.join(__dirname, 'cache');
+
+fs.ensureDirSync(CACHE_DIR); // garante que a pasta exista
+
+app.get('/image', async (req, res) => {
+  const imageUrl = req.query.url;
+  if (!imageUrl) return res.status(400).send('URL obrigatória');
+
+  const fileName = path.basename(imageUrl); // ex: imagem.jpg
+  const filePath = path.join(CACHE_DIR, fileName);
+
+  // Se já existe no cache
+  if (fs.existsSync(filePath)) {
+    return res.sendFile(filePath);
+  }
+
+  try {
+    const response = await axios.get(imageUrl, { responseType: 'stream' });
+    const writer = fs.createWriteStream(filePath);
+    response.data.pipe(writer);
+
+    writer.on('finish', () => {
+      res.sendFile(filePath);
+    });
+    writer.on('error', (err) => {
+      res.status(500).send('Erro ao salvar imagem');
+    });
+  } catch (err) {
+    res.status(500).send('Erro ao baixar imagem');
+  }
+});
+
+app.listen(PORT, () => {
+  console.log(`Servidor rodando em http://localhost:${PORT}`);
+});
